@@ -25,20 +25,7 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Publisher aw = new Publisher();
-        aw.setName("Addison-Wesley Professional PTG");
-        aw.setAddressLine1("221 River Street");
-        aw.setCity("Hoboken");
-        aw.setState("NJ");
-        aw.setZip("07030");
-        Author eric = new Author("Eric", "Evans");
-        Book ddd = new Book("Domain Driven Design", "9780321125217");
-        eric.getBooks().add(ddd);
-        ddd.getAuthors().add(eric);
-
-        authorRepository.save(eric);
-        bookRepository.save(ddd);
-        publisherRepository.save(aw);
+        System.out.println("Started in Bootstrap");
 
         Publisher wiley = new Publisher();
         wiley.setName("Wiley");
@@ -46,17 +33,32 @@ public class BootstrapData implements CommandLineRunner {
         wiley.setCity("Hoboken");
         wiley.setState("NJ");
         wiley.setZip("07030");
+
+        publisherRepository.save(wiley);
+
+        System.out.println("Publishers Count: " + publisherRepository.count());
+
+        Author eric = new Author("Eric", "Evans");
+        Book ddd = new Book("Domain Driven Design", "9780321125217");
+        eric.getBooks().add(ddd);
+        ddd.getAuthors().add(eric);
+        ddd.setPublisher(wiley);
+
+        authorRepository.save(eric);
+        bookRepository.save(ddd);
+        publisherRepository.save(wiley);
+
         Author rod = new Author("Rod", "Johnson");
         Book noEJB = new Book("J2EE Development without EJB", "9781280350368");
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
+        noEJB.setPublisher(wiley);
 
         authorRepository.save(rod);
         bookRepository.save(noEJB);
         publisherRepository.save(wiley);
 
-        System.out.println("Started in Bootstrap");
         System.out.println("Number of Books: " + bookRepository.count());
-        System.out.println("Number of Publishers: " + publisherRepository.count());
+        System.out.println("Publisher's Number of Books: " + wiley.getBooks().size());
     }
 }
